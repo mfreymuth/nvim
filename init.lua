@@ -720,6 +720,7 @@ require('lazy').setup({
         'tflint',
         'hadolint',
         'delve',
+        'markdownlint',
         -- You can add other tools here that you want Mason to install
       })
 
@@ -771,6 +772,7 @@ require('lazy').setup({
         yaml = { 'prettier' },
         json = { 'prettier' },
         sh = { 'shfmt' },
+        markdown = { 'markdownlint' },
       },
     },
   },
