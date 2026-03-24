@@ -302,6 +302,24 @@ require('lazy').setup({
   --
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
+  --
+  -- Schemas YAML/JSON auto (GitHub Actions, k8s, compose, etc.)
+  'b0o/schemastore.nvim',
+
+  {
+    'mfussenegger/nvim-dap',
+    dependencies = {
+      'leoluz/nvim-dap-go',
+      { 'rcarriga/nvim-dap-ui', dependencies = { 'nvim-neotest/nvim-nio' } },
+    },
+    config = function()
+      require('dap-go').setup()
+      require('dapui').setup()
+      vim.keymap.set('n', '<leader>db', require('dap').toggle_breakpoint, { desc = '[D]ap [B]reakpoint' })
+      vim.keymap.set('n', '<leader>dc', require('dap').continue, { desc = '[D]ap [C]ontinue' })
+      vim.keymap.set('n', '<leader>du', require('dapui').toggle, { desc = '[D]ap [U]I' })
+    end,
+  },
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
@@ -641,6 +659,49 @@ require('lazy').setup({
             Lua = {},
           },
         },
+
+        gopls = {
+          settings = {
+            gopls = {
+              gofumpt = true,
+              staticcheck = true,
+              analyses = { unusedparams = true, shadow = true },
+            },
+          },
+        },
+
+        clangd = {
+          cmd = { 'clangd', '--offset-encoding=utf-16' },
+        },
+
+        terraformls = {},
+
+        yamlls = {
+          settings = {
+            yaml = {
+              schemaStore = {
+                -- You must disable built-in schemaStore support if you want to use
+                -- this plugin and its advanced options like `ignore`.
+                enable = false,
+                -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                url = '',
+              },
+              schemas = require('schemastore').yaml.schemas(),
+            },
+          },
+        },
+        jsonls = {
+          settings = {
+            json = {
+              schemas = require('schemastore').json.schemas(),
+              validate = { enable = true },
+            },
+          },
+        },
+
+        bashls = {},
+
+        dockerls = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -652,6 +713,13 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'goimports',
+        'clang-format',
+        'shfmt',
+        'prettier',
+        'tflint',
+        'hadolint',
+        'delve',
         -- You can add other tools here that you want Mason to install
       })
 
@@ -684,7 +752,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {}
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -696,11 +764,13 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        go = { 'goimports' },
+        c = { 'clang-format' },
+        cpp = { 'clang-format' },
+        terraform = { 'terraform_fmt' },
+        yaml = { 'prettier' },
+        json = { 'prettier' },
+        sh = { 'shfmt' },
       },
     },
   },
@@ -874,7 +944,26 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      local parsers = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'go',
+        'cpp',
+        'hcl',
+        'yaml',
+        'json',
+        'dockerfile',
+        'toml',
+      }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
@@ -910,11 +999,11 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommended keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommended keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
