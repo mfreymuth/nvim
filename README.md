@@ -1,18 +1,38 @@
 # neovim-config
 
-My personal Neovim configuration, designed for Cloud and DevOps engineering, and
-modern software development.
+Personal Neovim configuration for Cloud/DevOps engineering and software development.
+Based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
 
 ## Prerequisites
 
-Before installing, ensure you have the following on your system:
+- [Neovim](https://neovim.io/) >= 0.11
+- git, make, unzip
+- [ripgrep](https://github.com/BurntSushi/ripgrep) (for Telescope grep)
+- A [Nerd Font](https://www.nerdfonts.com/) (optional, for icons)
 
-* **Neovim**
-* **Git**
-* **Nerd font** (recommended for icons)
-* **Ripgrep** (required for Telescope live grep)
+Everything else (LSP servers, formatters, linters, treesitter parsers) is
+installed automatically on first launch via Mason and Lazy.
 
-## Credits
+## Languages
 
-Based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim), a minimal
-yet powerful starting point that I have customized for my workflow.
+LSP, formatting, and linting are pre-configured for:
+
+Go, Lua, C/C++, Terraform, YAML, JSON, Bash, Docker, Markdown
+
+## Structure
+
+```
+init.lua                  -- Main configuration
+lua/kickstart/plugins/    -- Kickstart plugin configs
+lua/custom/plugins/       -- Personal plugin additions
+```
+
+## Install
+
+```bash
+git clone <this-repo> ~/.config/nvim
+nvim
+```
+
+Open Neovim and wait for plugins and tools to install. Run `:checkhealth` to
+verify everything is working.
