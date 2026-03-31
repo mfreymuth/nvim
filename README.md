@@ -22,17 +22,26 @@ Go, Lua, C/C++, Terraform, YAML, JSON, Bash, Docker, Markdown
 ## Structure
 
 ```
-init.lua                  -- Main configuration
-lua/kickstart/plugins/    -- Kickstart plugin configs
-lua/custom/plugins/       -- Personal plugin additions
+init.lua                  -- Lazy.nvim bootstrap + module loading
+lua/custom/options.lua    -- Vim settings (leader key, UI, search, etc.)
+lua/custom/keymaps.lua    -- Keymaps and diagnostic config
+lua/custom/autocmds.lua   -- Autocommands
+lua/custom/plugins/       -- Plugin specs (auto-imported by lazy.nvim)
+lua/kickstart/plugins/    -- Upstream kickstart plugin configs
 ```
 
 ## Install
 
 ```bash
-git clone <this-repo> ~/.config/nvim
+git clone git@github.com:mfreymuth/nvim.git ~/.config/nvim
 nvim
 ```
 
-Open Neovim and wait for plugins and tools to install. Run `:checkhealth` to
-verify everything is working.
+Open Neovim and wait for plugins and tools to install.
+
+## Useful commands
+
+- `:checkhealth` — verify config, LSP, plugins, and external deps
+- `:checkhealth lsp` — show attached LSP clients (replaces old `:LspInfo`)
+- `:Lazy` — manage plugins
+- `:Mason` — manage LSP servers, formatters, and linters
