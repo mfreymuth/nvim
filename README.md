@@ -1,4 +1,4 @@
-# neovim-config
+# nvim
 
 Personal Neovim configuration for Cloud/DevOps engineering and software development.
 Based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
