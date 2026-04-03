@@ -41,6 +41,7 @@ return {
       json = { 'prettier' },
       sh = { 'shfmt' },
       markdown = { 'markdownlint' },
+      python = { 'ruff_organize_imports', 'ruff_fix', 'ruff_format' },
     },
   },
 }

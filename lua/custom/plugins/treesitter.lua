@@ -27,6 +27,7 @@ return {
       'json',
       'dockerfile',
       'toml',
+      'typescript',
     }
     require('nvim-treesitter').install(parsers)
     vim.api.nvim_create_autocmd('FileType', {

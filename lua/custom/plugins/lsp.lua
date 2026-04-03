@@ -175,6 +175,10 @@ return {
       bashls = {},
 
       dockerls = {},
+
+      ts_ls = {},
+
+      basedpyright = {},
     }
 
     -- Ensure the servers and tools above are installed
@@ -182,7 +186,7 @@ return {
     -- other tools, you can run :Mason
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Lua formatter
+      'stylua',
       'goimports',
       'clang-format',
       'shfmt',
@@ -192,6 +196,7 @@ return {
       'delve',
       'markdownlint',
       'shellcheck',
+      'ruff',
     })
 
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
