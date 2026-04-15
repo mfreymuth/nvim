@@ -141,6 +141,7 @@ return {
             gofumpt = true,
             staticcheck = true,
             analyses = { unusedparams = true, shadow = true },
+            buildFlags = { '-tags=integration' },
           },
         },
       },
