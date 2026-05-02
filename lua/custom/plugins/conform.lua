@@ -40,7 +40,7 @@ return {
       yaml = { 'prettier' },
       json = { 'prettier' },
       sh = { 'shfmt' },
-      markdown = { 'markdownlint' },
+      markdown = { 'prettier' },
       python = { 'ruff_organize_imports', 'ruff_fix', 'ruff_format' },
     },
   },
