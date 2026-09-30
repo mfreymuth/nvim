@@ -106,6 +106,16 @@ return {
     -- Enable the following language servers
     -- They will automatically be installed via Mason.
     -- See `:help lsp-config` for information about keys and how to configure
+    -- jdtls needs Java 21+ to run, but projects are built with the JDK selected by sdkman
+    local project_jdk = vim.env.JAVA_HOME or vim.fn.expand '~/.sdkman/candidates/java/current'
+    local project_jdk_version = '17'
+    if vim.fn.filereadable(project_jdk .. '/release') == 1 then
+      for line in io.lines(project_jdk .. '/release') do
+        local major = line:match '^JAVA_VERSION="(%d+)'
+        if major then project_jdk_version = major == '1' and '1.8' or major end
+      end
+    end
+
     ---@type table<string, vim.lsp.Config>
     local servers = {
       -- Special Lua Config, as recommended by neovim help docs
@@ -182,6 +192,19 @@ return {
       ts_ls = {},
 
       basedpyright = {},
+
+      jdtls = {
+        cmd_env = { JAVA_HOME = vim.fn.expand '~/.sdkman/candidates/java/21.0.12+1.1-tem' },
+        settings = {
+          java = {
+            configuration = {
+              runtimes = {
+                { name = 'JavaSE-' .. project_jdk_version, path = project_jdk, default = true },
+              },
+            },
+          },
+        },
+      },
     }
 
     -- Ensure the servers and tools above are installed
